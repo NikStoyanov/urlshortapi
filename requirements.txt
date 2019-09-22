@@ -63,11 +63,3 @@ tox==3.14.0
 typed-ast==1.4.0
 tzlocal==2.0.0
 urllib3==1.25.3
--e git+git@github.com:NikStoyanov/urlshortapi@5843720c0c7b5d9d98513422fef9227b9e5f9178#egg=urlshortapi
-virtualenv==16.7.5
-wcwidth==0.1.7
-websocket-client==0.56.0
-Werkzeug==0.15.6
-whichcraft==0.6.1
-wrapt==1.11.2
-zipp==0.6.0
