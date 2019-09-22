@@ -1,0 +1,28 @@
+{
+    "AttributeDefinitions": [
+        {
+            "AttributeName": "url_string",
+            "AttributeType": "S"
+        },
+        {
+            "AttributeName": "uuid",
+            "AttributeType": "S"
+        }
+    ],
+    "TableName": "UrlShortener",
+    "KeySchema": [
+        {
+            "AttributeName": "uuid",
+            "KeyType": "HASH"
+        },
+        {
+            "AttributeName": "url_string",
+            "KeyType": "RANGE"
+        }
+    ],
+    "ProvisionedThroughput": {
+        "ReadCapacityUnits": 5,
+        "WriteCapacityUnits": 5
+    }
+}
+
