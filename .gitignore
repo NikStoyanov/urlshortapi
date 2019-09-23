@@ -3,3 +3,5 @@
 .tox/*
 urlshortapi.egg-info/*
 __pychache__/*
+urlshortapi/__pycache__/*
+*.pyc
