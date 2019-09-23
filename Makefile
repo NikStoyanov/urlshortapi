@@ -3,3 +3,5 @@ dev:
 test:
 	tox -e py36
 
+zappa:
+	zappa update production
