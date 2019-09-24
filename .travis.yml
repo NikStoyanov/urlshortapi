@@ -9,7 +9,10 @@ deploy:
   provider: script
   script:
     - pip install zappa
-    - zappa update production || zappa deploy production
-  skip_cleanup: true
+    - mkdir -p ~/.aws
+    - echo "[lambdaurlshortapi]" >> ~/.aws/credentials
+    - echo "aws_access_key_id = "$AWS_ACCESS_KEY_ID >> ~/.aws/credentials
+    - echo "aws_secret_access_key = "$AWS_SECRET_ACCESS_KEY >> ~/.aws/credentials
+    - zappa update production || zappa deploy production;
   on:
     branch: master
