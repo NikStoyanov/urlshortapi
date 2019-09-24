@@ -11,9 +11,6 @@ from urlshortapi import app
 ALPHABET = '23456789bcdfghjkmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ'
 BASE = len(ALPHABET)
 
-LINKSTABLE = "UrlShortener"
-LINKSREGION = "eu-west-2"
-
 
 def json_response(json_dict, status=200):
     """
