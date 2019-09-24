@@ -7,7 +7,9 @@ script:
   - tox
 deploy:
   provider: script
-  script: pip install zappa && zappa update production
+  script:
+    - pip install zappa
+    - zappa update production || zappa deploy production
   skip_cleanup: true
   on:
     branch: master
