@@ -1,10 +1,12 @@
 {
-    "production": {
+    "prod": {
         "app_function": "urlshortapi.app",
         "aws_region": "eu-west-2",
         "profile_name": "zappa-deploy",
-        "project_name": "urlshortapi",
-        "runtime": "python3.6",
         "s3_bucket": "urlshortapi"
+    },
+    "dev": {
+        "extends": "prod",
+        "debug": true
     }
 }
