@@ -26,3 +26,5 @@ script:
 
   # try to update, if the command fails do the initial deploy
   - zappa update $ZAPPA_STAGE || zappa deploy $ZAPPA_STAGE;
+after_success:
+  - codecov

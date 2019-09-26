@@ -1,6 +1,7 @@
 # URL Shortener backend in AWS Lambda
 
 [![Build Status](https://travis-ci.com/NikStoyanov/urlshortapi.svg?branch=master)](https://travis-ci.com/NikStoyanov/urlshortapi)
+[![codecov](https://codecov.io/gh/NikStoyanov/urlshortapi/branch/master/graph/badge.svg)](https://codecov.io/gh/NikStoyanov/urlshortapi)
 
 This package implements a bijective function which performs a one-to-one
 correspondence to define a URL shortener.
