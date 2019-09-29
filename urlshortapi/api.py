@@ -1,18 +1,16 @@
 """
-URL shortening API.
+URL shortening API in AWS lambda and DynamoDB.
 """
 
 import uuid
 import json
+import boto3
 from flask import Response
 
 from urlshortapi import app
 
 ALPHABET = '23456789bcdfghjkmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ'
 BASE = len(ALPHABET)
-
-LINKSTABLE = "UrlShortener"
-LINKSREGION = "eu-west-2"
 
 
 def json_response(json_dict, status=200):
@@ -33,6 +31,18 @@ def gen_id():
     return uuid.uuid1().int >> 90
 
 
+def build_dbconn(profile_name='zappa-deploy', linkstable='UrlShortener',
+                 linksregion='eu-west-2'):
+    """
+    Builds the connection string to the database.
+    """
+    session = boto3.Session(profile_name=profile_name)
+    dynamodb = session.resource('dynamodb', region_name=linksregion)
+    table = dynamodb.Table(linkstable)
+
+    return table
+
+
 @app.route('/encode/<path:url_string>', methods=["POST", "GET"])
 def encode(url_string):
     """
@@ -40,28 +50,51 @@ def encode(url_string):
     """
 
     id_num = gen_id()
-    url_string = ''
+    db_uuid = id_num
+    encoded_uuid = ''
 
     while id_num > 0:
-        url_string = ALPHABET[id_num % BASE] + url_string
+        encoded_uuid = ALPHABET[id_num % BASE] + encoded_uuid
         id_num //= BASE
 
-    response = json_response(json_dict={"url_string": url_string})
+    # Insert new entry in dynamodb
+    table = build_dbconn()
+    response = table.put_item(
+        Item={
+            'url_string': url_string,
+            'uuid': str(db_uuid)
+            }
+        )
 
+    # Return encoded url string
+    response_msg = '{"encoded_uuid": "' + encoded_uuid + '"}'
+    response = json_response(json.loads(response_msg), status=json.dumps(
+        response['ResponseMetadata']['HTTPStatusCode']))
     return response
 
 
-@app.route("/decode/<string:url_string>", methods=["POST", "GET"])
-def decode(url_string):
+@app.route("/decode/<string:encoded_uuid>", methods=["POST", "GET"])
+def decode(encoded_uuid):
     """
     Decode a string to uuid.
     """
 
-    id_num = 0
+    db_uuid = 0
 
-    for char in url_string:
-        id_num = id_num * BASE + ALPHABET.index(char)
+    for char in encoded_uuid:
+        db_uuid = db_uuid * BASE + ALPHABET.index(char)
 
-    response = json_response(json_dict={"id_num": id_num})
+    # Read entry in dynamodb
+    table = build_dbconn()
+    response = table.get_item(
+        Key={
+            'uuid': str(db_uuid)
+            }
+        )
 
+    # Return url from encoded url string
+    response_msg = '{"url_string": ' + json.dumps(
+                response['Item']['url_string']) + '}'
+    response = json_response(json.loads(response_msg), status=json.dumps(
+                response['ResponseMetadata']['HTTPStatusCode']))
     return response
