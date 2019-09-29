@@ -26,6 +26,5 @@ def resp_json(response):
 
 
 def test_alphabet(client):
-    response = client.get('/decode/23456789bcdfghjkmnpqrstvwxyz' +
-                          'BCDFGHJKLMNPQRSTVWXYZ')
+    response = client.get('/decode/6yXPbV3')
     assert response.status_code == 200

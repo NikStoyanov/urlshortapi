@@ -63,8 +63,8 @@ def encode(url_string):
         Item={
             'url_string': url_string,
             'uuid': str(db_uuid)
-            }
-        )
+        }
+    )
 
     # Return encoded url string
     response_msg = '{"encoded_uuid": "' + encoded_uuid + '"}'
@@ -89,12 +89,12 @@ def decode(encoded_uuid):
     response = table.get_item(
         Key={
             'uuid': str(db_uuid)
-            }
-        )
+        }
+    )
 
     # Return url from encoded url string
     response_msg = '{"url_string": ' + json.dumps(
-                response['Item']['url_string']) + '}'
+        response['Item']['url_string']) + '}'
     response = json_response(json.loads(response_msg), status=json.dumps(
-                response['ResponseMetadata']['HTTPStatusCode']))
+        response['ResponseMetadata']['HTTPStatusCode']))
     return response
