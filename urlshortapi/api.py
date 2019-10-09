@@ -31,12 +31,13 @@ def gen_id():
     return uuid.uuid1().int >> 90
 
 
-def build_dbconn(linkstable='UrlShortener'):
+def build_dbconn(profile_name='zappa-deploy', linkstable='UrlShortener',
+                 linksregion='eu-west-2'):
     """
     Builds the connection string to the database.
     """
-
-    dynamodb = boto3.resource('dynamodb')
+    session = boto3.Session(profile_name=profile_name)
+    dynamodb = session.resource('dynamodb', region_name=linksregion)
     table = dynamodb.Table(linkstable)
 
     return table
