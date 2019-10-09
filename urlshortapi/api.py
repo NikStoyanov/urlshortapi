@@ -2,6 +2,7 @@
 URL shortening API in AWS lambda and DynamoDB.
 """
 
+import os
 import uuid
 import json
 import boto3
@@ -31,13 +32,19 @@ def gen_id():
     return uuid.uuid1().int >> 90
 
 
-def build_dbconn(profile_name='zappa-deploy', linkstable='UrlShortener',
-                 linksregion='eu-west-2'):
+def build_dbconn(linkstable='UrlShortener'):
     """
     Builds the connection string to the database.
     """
-    session = boto3.Session(profile_name=profile_name)
-    dynamodb = session.resource('dynamodb', region_name=linksregion)
+
+    if 'TESTING' in os.environ:
+        profile_name = 'zappa-deploy'
+        linksregion = 'eu-west-2'
+        session = boto3.Session(profile_name=profile_name)
+        dynamodb = session.resource('dynamodb', region_name=linksregion)
+    else:
+        dynamodb = boto3.resource('dynamodb')
+
     table = dynamodb.Table(linkstable)
 
     return table
