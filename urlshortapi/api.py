@@ -80,7 +80,7 @@ def encode(url_string):
     return response
 
 
-@app.route("/decode/<string:encoded_uuid>", methods=["POST", "GET"])
+@app.route("/<string:encoded_uuid>", methods=["GET"])
 def decode(encoded_uuid):
     """
     Decode a string to uuid.
