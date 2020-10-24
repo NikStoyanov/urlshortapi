@@ -6,7 +6,7 @@ import os
 import uuid
 import json
 import boto3
-from flask import Response
+from flask import Response, redirect
 
 from urlshortapi import app
 
@@ -99,9 +99,5 @@ def decode(encoded_uuid):
         }
     )
 
-    # Return url from encoded url string
-    response_msg = '{"url_string": ' + json.dumps(
-        response['Item']['url_string']) + '}'
-    response = json_response(json.loads(response_msg), status=json.dumps(
-        response['ResponseMetadata']['HTTPStatusCode']))
-    return response
+    url = response['Item']['url_string']
+    return redirect(url, code=302)
